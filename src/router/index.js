@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Free from '@/components/Free/Free.vue'
+import Home from '@/components/Home/Home.vue'
 import Courses from '@/components/Courses/Courses.vue'
 import LightCourse from '@/components/LightCourse/LightCourse.vue'
 import Micro from '@/components/Micro/Micro.vue'
 import PersonalTest from '@/components/PersonalTest/PersonalTest.vue'
 import Students from '@/components/Students/Students.vue'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
     mode: 'history',
@@ -19,7 +20,7 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: Vue
+      component: Home
     },
         {
       path: '/Free',
