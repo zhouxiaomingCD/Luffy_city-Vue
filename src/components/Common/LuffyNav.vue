@@ -4,7 +4,7 @@
       <div class="header-nav">
         <div class="nav">
           <img src="//hcdn1.luffycity.com/static/frontend/activity/head-logo_1564141048.3435316.svg" alt=""
-               class="oldboy-logo">
+               class="oldboy-logo" @click="To_home()">
           <ul>
               <router-link v-for='(item) in modelList' :key="item.id" :to="{name:item.name}"><li>{{item.title}}</li></router-link>
           </ul>
@@ -39,10 +39,15 @@
           {"id": 4, "title": "就业班", 'name':"micro"},
           {"id": 5, "title": "题库",'name':"personal-test"},
           {"id": 6, "title": "学员成果", 'name':"students"}
-        ],
-        CurrentIndex:9
+        ]
       }
-    }
+    },
+      methods:{
+          To_home:function () {
+                        console.log(this)
+            this.$router.push({ path: 'home' })
+          }
+      }
     }
 </script>
 

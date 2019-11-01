@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Free from '@/components/Free/Free.vue'
+import FreeDetail from '@/components/Free/FreeDetail.vue'
 import Home from '@/components/Home/Home.vue'
 import Courses from '@/components/Courses/Courses.vue'
 import LightCourse from '@/components/LightCourse/LightCourse.vue'
@@ -11,10 +12,10 @@ import Students from '@/components/Students/Students.vue'
 Vue.use(Router);
 
 export default new Router({
-    mode: 'history',
+  mode: 'history',
   routes: [
     {
-     path: '/',
+      path: '/',
       redirect: '/home',
     },
     {
@@ -22,27 +23,35 @@ export default new Router({
       name: 'home',
       component: Home
     },
-        {
+    {
       path: '/Free',
       name: 'free',
       component: Free
+    },    {
+      path: '/Free/:course_id',
+      name: 'FreeDetail',
+      component: FreeDetail
     },
-        {
+    {
+      path: '/courses',
+      name: 'courses',
+      component: Courses
+    }, {
       path: '/courses',
       name: 'courses',
       component: Courses
     },
-        {
+    {
       path: '/light-course',
       name: 'light-course',
       component: LightCourse
     },
-        {
+    {
       path: '/micro',
       name: 'micro',
       component: Micro
     },
-   {
+    {
       path: '/personal-test',
       name: 'personal-test',
       component: PersonalTest
