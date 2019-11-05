@@ -1,17 +1,17 @@
 <template>
   <div class="free-detail">
-    <div class="free-top">
+    <div class="free-top" :style="`background:${courseDetail.template_color}`">
       <div class="back">
         <span><img src="/static/img/back.png" alt=""></span>
         <span>返回课程主页</span>
       </div>
       <div class="title">
-        <h1>Python21天入门</h1>
+        <h1>{{courseDetail.name}}</h1>
         <div class="brief-intro">
           <div>
-            <p>课程小节：26小节</p>
-            <p>时长：14小时</p>
-            <p>611人在学</p>
+            <p>课程小节：{{courseDetail.numbers}}小节</p>
+            <p>时长：{{courseDetail.hours}}小时</p>
+            <p>{{courseDetail.learn_number}}人在学</p>
           </div>
         </div>
       </div>
@@ -38,57 +38,133 @@
             <p class="title">
               你将会学到的
             </p>
-            <ul class="get-list">
-              <li>
+            <ul class="get-list" >
+              <li v-for="(outline,index) in courseDetail.course_outlines">
                 <span><img src="/static/img/get.png" alt=""></span>
-                <p>学会基本语法，流程控制，手刃一个300行代码的小程序</p>
-              </li>
-              <li>
-                <img src="/static/img/get.png" alt="">
-                <p>学会基本语法，流程控制，手刃一个300行代码的小程序</p>
-              </li>
-              <li>
-                <span><img src="/static/img/get.png" alt=""></span>
-                <p>学会基本语法，流程控制，手刃一个300行代码的小程序</p>
-              </li>
-              <li>
-                <span><img src="/static/img/get.png" alt=""></span>
-                <p>学会基本语法，流程控制，手刃一个300行代码的小程序</p>
+                <p>{{outline.title}}</p>
               </li>
             </ul>
           </div>
         </div>
         <div class="course-outline">
-          <div>
+          <div class="title-op">
             <p class="title">课程大纲</p>
             <p class="op-total">
               <span class="operation">全部收起</span>
-              <span class="total-list">16小节</span>
-              <span class="total-time">3:44:16</span>
+              <span class="total-list">{{courseInfo.section_count}}小节</span>
+              <span class="total-time">{{courseInfo.video_time}}</span>
             </p>
           </div>
-          <div class="data">
+          <div class="data" v-for="(section,index) in courseInfo.details" :key="section.id">
             <div class="listtitle">
-              第1章·计算机硬件
+              <p>
+                <img src="/static/img/jianhao.png" alt="">
+                {{section.name}}
+              </p>
+              <span class="alltime">{{section.video_time}}</span>
             </div>
             <ul class="datalist">
-              <li>
-                <img src="" alt="">
-                1.1计算机介绍
+              <li v-for="(course,index) in section.coursesections" :key="course.id">
+                <p>
+                  <img src="/static/img/bofang-s.png" alt="">
+                  1.{{index+1}}{{course.name}}
+                </p>
+                <span>
+                  10:57
+                </span>
               </li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="introduce"></div>
+      <div class="introduce">
+        <div class="side-video">
+          <div class="video-start">
+            <img :src="`//hcdn1.luffycity.com/${courseDetail.course_img}`" alt=""
+                 class="img">
+            <span class="bofang"><img src="/static/img/triangle.svg" alt=""></span>
+          </div>
+          <div class="power">
+            <p class="title">学霸团专属权益</p>
+            <ul>
+              <li>
+                <img src="/static/img/kejian-logo.png" alt="">
+                课件下载
+              </li>
+              <li>
+                <img src="/static/img/dianshi-logo.png" alt="">
+                定期公开课
+              </li>
+              <li>
+                <img src="/static/img/chat-logo.png" alt="">
+                学员交流
+                QQ群：{{courseDetail.chat_group.group_id}}
+              </li>
+              <li>
+                <img src="/static/img/answer-logo.png" alt="">
+                导师答疑
+              </li>
+            </ul>
+          </div>
+          <div class="start">
+            <div class="to-study">开始学习</div>
+            <a class="to-group" :href=courseDetail.chat_group.add_link>加入学霸团</a>
+          </div>
+        </div>
+        <div class="teacher-study">
+          <div class="teacher">
+            <p class="lable">讲师介绍</p>
+            <div class="short-intro">
+              <img :src=courseDetail.teacher.image alt="">
+              <div class="info">
+                <p class="name">{{courseDetail.teacher.name}}</p>
+                <p class="short">{{courseDetail.teacher.title}}</p>
+              </div>
+
+            </div>
+            <article>
+              {{courseDetail.teacher.brief}}
+            </article>
+          </div>
+          <div class="study">
+            <p class="title">学习路径</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="free-video"></div>
+    <div class="video-play">
+
+    </div>
   </div>
 </template>
 
 <script>
   export default {
-    name: "FreeDetail"
+    name: "FreeDetail",
+    data() {
+      return {
+        reverse: true,
+        courseInfo: {},
+        courseDetail: {}
+      };
+    },
+    methods: {
+      GetCourseInfo() {
+        this.$http.get(`https://www.luffycity.com/api/v1/course/${this.$route.params.course_id}/sections/`).then((res) => {
+          this.courseInfo = res.data.data;
+        })
+      },
+      GetCoursedetail() {
+          this.$http.get(`https://www.luffycity.com/api/v1/free/${this.$route.params.course_id}/detail/`).then((res) => {
+          this.courseDetail = res.data.data;
+          console.log(this.courseDetail)
+        })
+      }
+    },
+    created() {
+      this.GetCourseInfo();
+      this.GetCoursedetail()
+    },
   }
 </script>
 
@@ -96,7 +172,6 @@
   .free-top {
     width: 100%;
     height: 300px;
-    background: rgb(88, 82, 82);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -175,6 +250,7 @@
     display: flex;
     justify-content: center;
     margin-top: 24px;
+    position: relative;
   }
 
   .free-content .content-box {
@@ -222,6 +298,258 @@
 
   .free-content .introduce {
     width: 374px;
+    border: 1px solid red;
+  }
+
+  .course-outline .title-op {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 50px;
+    margin-bottom: 13px;
+    padding-left: 17px;
+    padding-right: 20px;
+  }
+
+  .course-outline .title {
+    font-size: 22px;
+    color: #000;
+  }
+
+  .course-outline .op-total {
+    font-size: 14px;
+    color: #2a2a2a;
+  }
+
+  .course-outline .op-total span {
+    margin-left: 39px;
+  }
+
+  .course-outline .data .listtitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .data .listtitle {
+    padding-left: 26px;
+    padding-right: 20px;
+    cursor: pointer;
+    height: 48px;
+    background-color: #f9f9f9;
+  }
+
+  .data .listtitle p {
+    font-size: 15px;
+    color: #5e5e5e;
+    display: flex;
+    align-items: center;
+  }
+
+  .data .listtitle img {
+    margin-right: 10px;
+    width: 10px;
+    height: auto;
+  }
+
+  .data .listtitle .alltime {
+    color: #4a4a4a;
+    font-size: 14px;
+  }
+
+  .data .datalist li {
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 50px;
+    padding-right: 20px;
+    color: #6ca4c5;
+    font-size: 14px;
+    border:1px solid #dadada;
+    border-bottom: 0;
+    border-radius: 2px;
+    background-color: #fff;
+    cursor: pointer;
+  }
+  .data .datalist li:nth-last-child(1){
+        border: 1px solid #dadada;
+  }
+  .data .datalist li:hover {
+    color: #3a8ee6;
+  }
+
+  .data .datalist li p {
+    display: flex;
+    align-items: center;
+
+  }
+
+  .data .datalist li img {
+    width: 16px;
+    height: 16px;
+    margin-right: 9px;
+  }
+
+  .free-content .introduce {
+    width: 374px;
+    height: auto;
+    margin-left: 40px;
+    margin-top: -260px;
+    border: 1px;
+  }
+
+  .side-video {
+    border-radius: 6px;
+    border: 1px solid #e8e8e8;;
+  }
+
+  .side-video .video-start {
+    padding: 5px 4px 27px;
+    position: relative;
+    box-shadow: 0 -2px 4px 0 #f3f3f3;
+    cursor: pointer;
+    background-color: #fff;
+  }
+
+  .side-video .video-start .img {
+    width: 364px;
+    height: 206px;
+  }
+
+  .side-video .video-start span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 51px;
+    left: 130px;
+    width: 104px;
+    height: 104px;
+    border-radius: 100%;
+    background-color: #948b8b33;
+  }
+
+  .side-video .video-start .bofang img {
+    width: 46px;
+    margin-left: 12px;
+  }
+
+  .side-video .power {
+    padding: 0 31px 32px;
+  }
+
+  .side-video .power p {
+    font-size: 15px;
+    color: #000;
+    margin-bottom: 20px;
+  }
+
+  .side-video .power ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 12px;
+    color: #4a4a4a;;
+  }
+
+  .side-video .power ul li {
+    width: 150px;
+    display: flex;
+    align-items: center;
+  }
+
+  .side-video .power ul li:nth-child(-n+2) {
+    margin-bottom: 18px;
+  }
+
+  .side-video .power ul img {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+  }
+
+  .side-video .start {
+    padding: 0 31px 30px;
+    font-size: 18px;
+    line-height: 52px;
+    text-align: center;
+  }
+
+  .side-video .start .to-study {
+    height: 52px;
+    background-color: #ffc210;
+    color: #fff;
+    margin-bottom: 15px;
+    cursor: pointer;
+  }
+
+  .side-video .start .to-group {
+    display: block;
+    width: 100%;
+    height: 50px;
+    color: #f5a623;
+    border: 1px solid #f5a623;
+  }
+
+  .teacher-study {
+    margin-top: 18px;
+    padding: 30px 31px;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 6px;
+  }
+
+  .teacher {
+    padding-bottom: 24px;
+    border-bottom: 1px dashed #d0d0d0;
+  }
+
+  .teacher .lable {
+    color: #000;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .teacher-study .short-intro {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+
+  .teacher-study .short-intro img {
+    width: 58px;
+    height: 58px;
+    border-radius: 100%;
+    margin-right: 12px;
+  }
+
+  .short-intro .info .name {
+    font-size: 16px;
+    color: #4a4a4a;
+    margin-bottom: 4px;
+  }
+
+  .short-intro .info .short {
+    font-size: 13px;
+    color: #9d9d9d;
+  }
+
+  .teacher article {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #5e5e5e;
+    line-height: 26px;
+  }
+
+  .study {
+    margin-top: 30px;
+  }
+
+  .study .title {
+    font-size: 15px;
+    color: #4a4a4a;
+    margin-bottom: 23px;
   }
 
 
