@@ -4,6 +4,8 @@ import Free from '@/components/Free/Free.vue'
 import FreeDetail from '@/components/Free/FreeDetail.vue'
 import Home from '@/components/Home/Home.vue'
 import Courses from '@/components/Courses/Courses.vue'
+import CourseDetail from '@/components/Courses/CourseDetail.vue'
+import Buy from '@/components/Buy/Buy.vue'
 import LightCourse from '@/components/LightCourse/LightCourse.vue'
 import Micro from '@/components/Micro/Micro.vue'
 import PersonalTest from '@/components/PersonalTest/PersonalTest.vue'
@@ -37,9 +39,13 @@ export default new Router({
       name: 'courses',
       component: Courses
     }, {
-      path: '/courses',
-      name: 'courses',
-      component: Courses
+      path: '/courses/:course_id/details-introduce',
+      name: 'CourseDetail',
+      component: CourseDetail
+    }, {
+      path: '/buy',
+      name: 'buy',
+      component: Buy
     },
     {
       path: '/light-course',

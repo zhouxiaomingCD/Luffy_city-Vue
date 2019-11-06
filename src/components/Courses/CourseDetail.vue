@@ -1,279 +1,483 @@
 <template>
-	<div class="wrap">
-		<div class="web-course-banner">
-			<div class="container">
-				<div class="title">
-					<img src="/static/img/play.png" height="67" width="67" alt="">
-					<h1 class="course-title">Django框架学习</h1>
-				</div>
-				<span class="course-text">Python语言下最强大优秀的WEB框架从入门到进阶</span>
-				<div class="course-list">
-					<ul>
-					    <li class="detail-item">
-					    	难度：初级
-					    </li>
-					    <li class="sep"></li>
-					    <li class = detail-item>时长：32小时</li>
-					    <li class="sep"></li>
-					     <li class = detail-item>学习人数：632人</li>
-					    <li class="sep"></li>
-					    <li class = detail-item>评分 10.0</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<div class="course-review">
-			<ul class="review-head-wrap">
-				<li class="head-item">课程概述</li>
-				<li class="head-item">课程章节</li>
-				<li class="head-item">用户评价(10)</li>
-				<li class="head-item">常见问题</li>
+  <div class="wrap">
+    <div class="courseItem">
+      <div class="item">
+        <div class="img">
+          <img
+            :src=paymentInfo.course_img
+            alt="">
+        </div>
+        <div class="info">
+          <p class="name">{{topInfo.name}}</p>
+          <div class="statistics">
+            <p>{{topInfo.learn_number}}人在学</p>
+            <p>课程小节：{{topInfo.numbers}}小节</p>
+            <p>时长：{{topInfo.hours}}小时</p>
+          </div>
+          <div class="dis-limit">
+            <p class="discount">{{paymentInfo.promotion_name}}</p>
+            <p class="limit-time">距离结束：仅剩 25天 09小时 41分 <span>30</span> 秒</p>
+          </div>
+          <div class="price">
+            <span class="title">活动价</span>
+            <span class="now">¥{{paymentInfo.promotion_price}}</span>
+            <span class="org">¥{{paymentInfo.price}}</span>
+          </div>
+          <div class="confirm">
+            <div>
+              <p class="toBuy" @click="Tobuy()">立即购买</p>
+              <p class="free-to-try">免费试学</p>
+            </div>
+            <p class="shop-cart">
+              <img src="/static/img/course-shop-cart.svg" alt="">
+              加入购物车
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab">
+      <ul>
+        <li>课程详情</li>
+        <li>课程大纲 <span style="color: #fb7c55">(试学)</span></li>
+        <li>讨论提问<span style="color: #fb7c55">(2)</span></li>
+      </ul>
+    </div>
+    <div class="show">
+      <div class="detail">
+        <div class="left" v-html="courseImagesHtml">
+        </div>
+        <div class="right">
+          <div class="study">
+            <div class="power">
+              <p class="title">学霸团专属权益</p>
+              <ul>
+                <li>
+                  <i class="el-icon-document"></i>
+                  课件下载
+                </li>
+                <li>
+                  <i class="el-icon-monitor"></i>
+                  定期公开课
+                </li>
+                <li v-if="teacherInfo.chat_group" >
+                  <i class="el-icon-chat-dot-round"></i>
+                  学员交流 <br>
+                  QQ群：{{teacherInfo.chat_group.group_id}}
+                </li>
+                <li>
+                  <i class="el-icon-user"></i>
+                  导师答疑
+                </li>
+              </ul>
+            </div>
+            <div class="start" v-if="teacherInfo.chat_group">
+              <a class="to-group" :href="teacherInfo.chat_group.add_link">加入学霸团</a>
+            </div>
+          </div>
+          <div class="teacher" v-if="teacherInfo.teacher">
+            <p class="lable">讲师介绍</p>
+            <div class="short-intro" >
+              <img   :src=teacherInfo.teacher.image alt="">
+              <div class="info">
+                <p class="name">{{teacherInfo.teacher.name}}</p>
+                <p class="short">{{teacherInfo.teacher.title}}</p>
+              </div>
 
-			</ul>
-		</div>
-		<!-- 课程详情 -->
-		<div class="course-detail">
-			<div class="container">
-				<div class="course-detail-text">
-					<h3>课程概述</h3>
-					<p>
-						Django是Python语言中最流行、最强大的WEB框架，可快速构建稳定强大的WEB项目，大大提高开发效率，很多知名项目都是基于Django开发，如Disqus、Pinterest、Instagram、Bitbucket等， Django官方Slogan是The framework for perfectionist with deadline! 一个为完美主义者且又开发工期很紧的人设计的框架，事实确实如此，Django自身集成了丰富的WEB开发通用组件，如用户认证、分页、中间件、缓存、session等，可以避免浪费大量时间重复造轮子。人生苦短，join the course now and start to build your first web program based on Django.
-					</p>
-				</div>
-				<div class="course-img">
-					<img src="https://www.luffycity.com/static/img/web-introduce.d075499.png" alt="">
-				</div>
-			</div>
-		</div>
-		<div class="course-price">
-			<div class="container">
-				<span>可以根据不同的学习情况购买不一样的学习套餐哦！</span>
-				<ul class="course-price-item" >
-					<li @click = 'priceHandler(index)' :class = '{active:index == currentIndex}' v-for = '(price,index) in prices' :key='price.id'>
-						<p class="price" :class = '{active:index === currentIndex}'>¥{{ price.price }}</p>
-						<p class="time" :class = '{active:index === currentIndex}'>有效期{{price.valid_period_name}}</p>
-					</li>
-					
-				</ul>
-				<div class="course-action">
-					<button class="left">购买</button>
-					<button class="right" @click = 'addShopCart'>加入购物车</button>
-				</div>
-			</div>
-		</div>
-	
-	</div>
+            </div>
+            <article>
+              {{teacherInfo.teacher.brief}}
+            </article>
+          </div>
+        </div>
+      </div>
+      <!--      <div class="course-outline">-->
+      <!--        课程大纲-->
+      <!--      </div>-->
+      <!--      <div class="discuss">-->
+      <!--        讨论提问-->
+      <!--      </div>-->
+    </div>
+  </div>
 </template>
 
 <script>
-export default {
+  export default {
 
-  name: 'CourseDetail',
-  data(){
+    name: 'CourseDetail',
+    data() {
       return {
-          prices:[], //价格套餐
-          currentIndex:null
+        prices: [], //价格套餐
+        currentIndex: null,
+        paymentInfo: {},
+        teacherInfo: {},
+        courseImagesHtml: {},
+        topInfo: {}
       }
-  },
-  methods:{
+    },
+    methods: {
+      GetPaymentInfo() {
+        this.$http.get(`/course/${this.$route.params.course_id}/payment_info/`).then((res) => {
+          this.paymentInfo = res.data.data;
+          console.log(this.paymentInfo)
+        })
+      },  //获取课程价格等信息
+      GetTeacherInfo() {
+        this.$http.get(`/course/${this.$route.params.course_id}/right/`).then((res) => {
+          this.teacherInfo = res.data.data;
+          console.log(this.teacherInfo)
+        })
 
-  },
-  created(){
-  }
-};
+      },  //获取右侧信息
+      GetTopInfo() {
+        this.$http.get(`/course/${this.$route.params.course_id}/top/`).then((res) => {
+          this.topInfo = res.data.data;
+          console.log(this.topInfo)
+        })
+      },    //获取顶部课程信息
+      GetImagesHtml() {
+        this.$http.get(`/course/${this.$route.params.course_id}/detail/`).then((res) => {
+          this.courseImagesHtml = res.data.data;
+          // console.log(this.courseImagesHtml.content);
+          let temp = this.courseImagesHtml.content.split("src=\"");
+          this.courseImagesHtml = temp.join("src=\"" + "//www.luffycity.com");
+          // console.log(this.courseImagesHtml);
+        })
+      }, // 返回的是html，因为调用了路飞的接口，所以需要在src加一个路飞的域名
+      Tobuy() {
+        this.$router.push({ name: 'buy', params: { products: [{course_id: this.paymentInfo.id, valid_period: this.paymentInfo.valid_period}], is_degree: 0}})
+      } //跳转至登录页面
+    },
+    created() {
+      this.GetPaymentInfo();
+      this.GetTeacherInfo();
+      this.GetImagesHtml();
+      this.GetTopInfo();
+    }
+  };
 </script>
 
 <style lang="css" scoped>
-.wrap{
-	width: 100%;
-}
-.web-course-banner{
+  .wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fafafa;
+  }
+
+  .wrap .courseItem {
     width: 100%;
-    height: 512px;
-    background: url(https://www.luffycity.com/static/img/web-banner.1402933.png) no-repeat;
-    background-size: 100% 100%;
-    text-align: center;
-    overflow: hidden;
-}
-.container{
-	width: 1200px;
-	margin: 182px auto 0;
-	text-align: left;
-}
-.container img{
-	vertical-align: middle;
-}
-.container h1{
-	display: inline-block;
-	font-size: 48px;
-    color: #4a4a4a;
-    letter-spacing: .37px;
-    margin-left: 40px;
-    font-family: PingFangSC-Light;
-    font-weight: 500;
-    line-height: 1.1;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+  }
+
+  .wrap .courseItem .item {
+    width: 1200px;
+    display: flex;
+    flex-direction: row;
+
+  }
+
+  .courseItem .item .img img {
+    width: 690px;
+    height: 388px;
+  }
+
+  .courseItem .info {
+    width: 100%;
     position: relative;
-    top: 10px;
-}
-.course-text{
-    width: 464px;
+  }
+
+  .courseItem .info p.name {
+    font-size: 20px;
+    color: #333;
+    padding: 10px 23px;
+  }
+
+  .courseItem .info .statistics {
+    display: flex;
+    flex-direction: row;
+    padding-left: 23px;
+    padding-right: 23px;
+    padding-bottom: 16px;
+    font-size: 14px;
+    color: #9b9b9b;
+  }
+
+  .info .statistics p {
+    margin-right: 20px;
+  }
+
+  .info .dis-limit {
+    padding: 10px 23px;
+    height: 32px;
+    background-color: #fa6240;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .info .dis-limit .discount {
+    font-size: 16px;
+
+  }
+
+  .info .dis-limit .limit-time {
+    font-size: 14px;
+
+  }
+
+  .info .dis-limit .limit-time span {
+    padding: 6px 0;
+    background-color: #fafafa;
+    color: #5e5e5e;;
+  }
+
+  .info .price {
+    padding: 5px 23px;
+    display: flex;
+    align-items: baseline;
+  }
+
+  .info .price span {
+    margin-right: 12px;
+
+  }
+
+  .info .price .title {
+    font-size: 14px;
+    color: #4a4a4a;
+
+  }
+
+  .info .price .now {
+    font-size: 26px;
+    color: #fa6240;
+    font-family: PingFangSC-Regular;
+  }
+
+  .info .price .org {
+    font-size: 14px;
+    text-decoration: line-through;
+    color: #9b9b9b;
+  }
+
+  .info .confirm {
+    width: 100%;
+    position: absolute;
+    padding-left: 23px;
+    left: 0;
+    bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .info .confirm div {
+    display: flex;
+    justify-content: center;
+  }
+
+  .info .confirm div p {
+
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+  .info .confirm .toBuy {
+    width: 125px;
+    height: 40px;
+    background-color: #ffc210;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .info .confirm .free-to-try {
+    width: 123px;
+    height: 38px;
+    border: 1px solid #ffc210;
+    background-color: #fff;
+    color: #ffc210;
+    cursor: pointer;
+  }
+
+  .info .confirm .shop-cart {
+    margin-right: 35px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #ffc210;
+    cursor: pointer;
+    font-family: PingFangSC-Regular;
+  }
+
+  .confirm .shop-cart img {
+    width: 20px;
+    height: auto;
+    margin-right: 7px;
+  }
+
+  .wrap .tab {
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 2px 4px 0 #f0f0f0;
+  }
+
+  .tab ul {
+    width: 1200px;
+    display: flex;
+    flex-direction: row;
+    color: #4a4a4a;
+    align-items: center;
+  }
+
+  .tab ul li {
+    margin-right: 15px;
+    padding: 26px 20px 16px;
+    font-size: 17px;
+    cursor: pointer;
+  }
+
+  .show {
+    width: 100%;
+
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .show .detail {
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+
+  }
+
+  .detail .left {
+    width: 755px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 4px;
+  }
+
+  .left >>> img {
+    width: 755px;
+    height: auto;
+  }
+
+  .detail .right {
+    width: 374px;
+  }
+
+  .detail .right .study {
+    background-color: #fff;
+    border-radius: 4px;
+
+  }
+
+  .detail .right .power {
+    padding: 20px 30px 31px;
+  }
+
+  .detail .right .power p {
+    font-size: 15px;
+    color: #000;
+    margin-bottom: 20px;
+  }
+
+  .detail .right .power ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    color: #4a4a4a;;
+  }
+
+  .detail .right .power ul li {
+    width: 150px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .detail .right .power ul li:nth-child(-n+2) {
+    margin-bottom: 18px;
+  }
+
+  .detail .right .power ul i {
     display: inline-block;
     font-size: 22px;
-    color: #4a4a4a;
-    letter-spacing: .17px;
-    line-height: 36px;
-    margin-top: 33px;
-}
-.course-list{
-	width: 100%;
-}
-.course-list ul{
-	margin-top: 63px;
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-}
-.course-list ul li.detail-item{
+    margin-right: 9px;
+  }
+
+  .detail .right .start {
+    padding: 0 30px 30px;
     font-size: 18px;
-    color: #4a4a4a;
-    letter-spacing: .74px;
-    height: 26px;
-    padding: 0 20px;
-}
-.course-list ul li.sep{
-	width: 2px;
-	height: 14px;
-	border-left: 1px solid #979797;
-}
-.course-review{
-	width: 100%;
-	height: 80px;
-	background: #fafbfc;
-	border-top: 1px solid #e8e8e8;
-	box-shadow: 0 1px 0 0 #e8e8e8;
-}
-.review-head-wrap{
-	width: 590px;
-	margin: 0 auto;
-	display: flex;
-	justify-content: space-between;
-}
-.review-head-wrap .head-item{
-height: 80px;
-    line-height: 80px;
-    font-size: 16px;
-    color: #555;
+    line-height: 52px;
+    text-align: center;
+  }
+
+  .detail .right .start .to-group {
+    display: block;
+    width: 100%;
+    height: 50px;
+    color: #f5a623;
+    border: 1px solid #f5a623;
     cursor: pointer;
-}
-.course-detail{
-	width: 100%;
-	padding-top: 90px;
+  }
 
-}
-.course-detail .container{
-	width: 1200px;
-	margin: 0 auto;
-	display: flex;
-	justify-content:space-between;
-}
-.course-detail-text{
-	width: 500px;
-	text-align:left;
 
-}
-.course-detail-text h3{
-	padding: 20px 0;
-}
-.course-detail-text p{
-	    width: 100%;
-	    height: 196px;
-	    font-size: 14px;
-	    color: #4A4A4A;
-	    letter-spacing: 1.83px;
-	    line-height: 30px;
-	    text-align: left;
-}
-.course-price{
-	width: 100%;
-	background: #FAFAFA;
+  .detail .right .teacher {
+    margin-top: 18px;
+    background-color: #fff;
+    padding: 30px 31px;
+  }
 
-}
-.course-price .container{
-	width: 1200px;
-	margin: 0 auto;
-	text-align: center;
-}
-.course-price span{
-	 font-size: 12px;
-	    color: #9b9b9b;
-	    letter-spacing: 1.57px;
-	    display: inline-block;
-	    margin-top: 102px
-} 
-.course-price ul{
-	/*width: 800px;*/
-	margin: 50px auto;
+  .detail .right .teacher .lable {
+    color: #000;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
 
-	display: flex;
-	flex-wrap: wrap;
-	justify-content:space-between;
-}
-.course-price ul li{
-	width: 200px;
-	height: 112px;
-	border: 1px solid #979797;
-}
-.course-price ul li.active{
-    background: #00CD23;
-   
-}
-.course-price ul li p:first-child{
-	font-size: 24px;
-   	 letter-spacing: 1.92px;
-    	color: #333;
-    	margin-top: 17px;
-}
-.course-price ul li p:nth-child(2){
+  .right .teacher .short-intro {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
 
-	    color: #9b9b9b;
-	    font-size: 20px;
-	    letter-spacing: 1.6px;
-	    margin-top: 9px;
-}
-.course-price ul li p.active{
-    color: #fff;
-}
-.course-action{
-	width: 1000px;
-	margin: 0 auto;
-	padding-bottom: 80px;
-	display: flex;
-	justify-content: center;
-}
-.course-action button{
-	border:none;
-	outline: none;
-	cursor: pointer;
-	display: inline-block;
-	width: 181px;
-	    height: 51px;
-	    font-size: 14px;
-	    color: #fff;
-	    letter-spacing: 1.12px;
-	    text-align: center;
-	    background: #f5a623;
-	    border-radius: 82px;
-}
-.course-action button.left{
-	background: #7ed321;
-    	box-shadow: 0 2px 4px 0 #e8e8e8;
-    	color: #fff;
-    	margin-right: 48px;
-    	padding: 0 20px;
-}
-.course-action button.right{
-	background: #f5a623 url() no-repeat 125px 15px!important;
-}
+  .right .teacher .short-intro img {
+    width: 58px;
+    height: 58px;
+    border-radius: 100%;
+    margin-right: 12px;
+  }
 
-    
+  .right .short-intro .info .name {
+    font-size: 16px;
+    color: #4a4a4a;
+    margin-bottom: 4px;
+  }
+
+  .right .short-intro .info .short {
+    font-size: 13px;
+    color: #9d9d9d;
+  }
+
+  .right .teacher article {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #5e5e5e;
+    line-height: 26px;
+  }
+
+
 </style>

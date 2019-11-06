@@ -19,7 +19,7 @@
              <div class="name">{{item.name}}</div>
         <ul>
           <li v-for="(course) in item.courses">
-            <a href="">
+            <a :href="`${$route.path}`+'/'+course.id">
               <div class="img-box">
                 <img :src=course.course_img alt="">
               </div>

@@ -1,3 +1,4 @@
+
 <template>
   <div class="free-detail">
     <div class="free-top" :style="`background:${courseDetail.template_color}`">
@@ -56,14 +57,15 @@
             </p>
           </div>
           <div class="data" v-for="(section,index) in courseInfo.details" :key="section.id">
-            <div class="listtitle">
+            <div class="listtitle" @click="ListSwitch(index)">
               <p>
-                <img src="/static/img/jianhao.png" alt="">
+                <img src="/static/img/jianhao.png"  alt=""  v-if="isOpen.indexOf(index)!==-1">
+                <img src="/static/img/jiahao.png"  alt="" v-else>
                 {{section.name}}
               </p>
               <span class="alltime">{{section.video_time}}</span>
             </div>
-            <ul class="datalist">
+            <ul class="datalist" v-if="isOpen.indexOf(index)!==-1">
               <li v-for="(course,index) in section.coursesections" :key="course.id">
                 <p>
                   <img src="/static/img/bofang-s.png" alt="">
@@ -77,8 +79,8 @@
           </div>
         </div>
       </div>
-      <div class="introduce">
-        <div class="side-video">
+      <div class="introduce" >
+        <div class="side-video" v-if="courseDetail.chat_group">
           <div class="video-start">
             <img :src="`//hcdn1.luffycity.com/${courseDetail.course_img}`" alt=""
                  class="img">
@@ -86,7 +88,7 @@
           </div>
           <div class="power">
             <p class="title">学霸团专属权益</p>
-            <ul>
+            <ul >
               <li>
                 <img src="/static/img/kejian-logo.png" alt="">
                 课件下载
@@ -112,7 +114,7 @@
           </div>
         </div>
         <div class="teacher-study">
-          <div class="teacher">
+          <div class="teacher"   v-if="courseDetail.teacher">
             <p class="lable">讲师介绍</p>
             <div class="short-intro">
               <img :src=courseDetail.teacher.image alt="">
@@ -145,7 +147,8 @@
       return {
         reverse: true,
         courseInfo: {},
-        courseDetail: {}
+        courseDetail: {},
+        isOpen:[0]
       };
     },
     methods: {
@@ -154,16 +157,24 @@
           this.courseInfo = res.data.data;
         })
       },
-      GetCoursedetail() {
+      GetCourseDetail() {
           this.$http.get(`https://www.luffycity.com/api/v1/free/${this.$route.params.course_id}/detail/`).then((res) => {
           this.courseDetail = res.data.data;
           console.log(this.courseDetail)
         })
+      },
+      ListSwitch(index){
+        if( this.isOpen.indexOf(index)===-1){
+         this.isOpen.unshift(index);
+        }
+        else {
+          this.isOpen.splice(this.isOpen.indexOf(index),1)
+        }
       }
     },
     created() {
       this.GetCourseInfo();
-      this.GetCoursedetail()
+      this.GetCourseDetail()
     },
   }
 </script>
@@ -324,7 +335,9 @@
   .course-outline .op-total span {
     margin-left: 39px;
   }
-
+.course-outline .data{
+      margin-bottom: 2px;
+}
   .course-outline .data .listtitle {
     display: flex;
     justify-content: space-between;
@@ -356,7 +369,6 @@
     color: #4a4a4a;
     font-size: 14px;
   }
-
   .data .datalist li {
     height: 48px;
     display: flex;
@@ -554,3 +566,5 @@
 
 
 </style>
+
+

@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="course-list" v-for="(item) in CourseList" :key="item.id">
-        <dl>
+        <dl @click="ToDetail(item.id)">
           <dt><img :src=item.course_img alt=""></dt>
           <dd>
             <div class="name">
@@ -89,11 +89,13 @@
             console.log(error);
           })
       },
+      ToDetail(index){
+        this.$router.push(this.$route.path+"/"+index+"/details-introduce")
+      }
     },
     created() {
       this.GetCategoryList();
       this.GetCourseList();
-
     }
   }
 </script>
