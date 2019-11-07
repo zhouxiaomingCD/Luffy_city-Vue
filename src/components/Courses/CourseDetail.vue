@@ -14,13 +14,17 @@
             <p>课程小节：{{topInfo.numbers}}小节</p>
             <p>时长：{{topInfo.hours}}小时</p>
           </div>
-          <div class="dis-limit">
+          <div class="dis-limit" v-if="paymentInfo.is_promotion">
             <p class="discount">{{paymentInfo.promotion_name}}</p>
-            <p class="limit-time">距离结束：仅剩 25天 09小时 41分 <span>30</span> 秒</p>
+            <p class="limit-time" v-if="paymentInfo.is_promotion">距离结束：仅剩 25天 09小时 41分 <span>30</span> 秒</p>
           </div>
-          <div class="price">
-            <span class="title">活动价</span>
-            <span class="now">¥{{paymentInfo.promotion_price}}</span>
+          <div class="noPromotion" v-else>
+                  <span class="label">价格</span>
+                    <span class="price">¥{{paymentInfo.price}}</span>
+          </div>
+          <div class="price" v-if="paymentInfo.is_promotion">
+            <span class="title" >活动价</span>
+            <span class="now" >¥{{paymentInfo.promotion_price}}</span>
             <span class="org">¥{{paymentInfo.price}}</span>
           </div>
           <div class="confirm">
@@ -219,6 +223,23 @@
     justify-content: space-between;
     align-items: center;
   }
+.info .noPromotion{
+  width: 100%;
+    height: auto;
+    background: #f9f1e7;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    color: #4a4a4a;
+    display: flex;
+    align-items: flex-end;
+    padding: 10px 23px;
+}
+.noPromotion span.price{
+font-size: 26px;
+    color: #fa6240;
+    margin-left: 10px;
+  margin-bottom: -5px;
+}
 
   .info .dis-limit .discount {
     font-size: 16px;
@@ -236,30 +257,30 @@
     color: #5e5e5e;;
   }
 
-  .info .price {
+  .info div.price {
     padding: 5px 23px;
     display: flex;
     align-items: baseline;
   }
 
-  .info .price span {
+  .info div.price span {
     margin-right: 12px;
 
   }
 
-  .info .price .title {
+  .info div.price .title {
     font-size: 14px;
     color: #4a4a4a;
 
   }
 
-  .info .price .now {
+  .info div.price .now {
     font-size: 26px;
     color: #fa6240;
     font-family: PingFangSC-Regular;
   }
 
-  .info .price .org {
+  .info div.price .org {
     font-size: 14px;
     text-decoration: line-through;
     color: #9b9b9b;
