@@ -19,7 +19,7 @@
              <div class="name">{{item.name}}</div>
         <ul>
           <li v-for="(course) in item.courses">
-            <a :href="`${$route.path}`+'/'+course.id">
+            <div  @click="toDetail(course.id)">
               <div class="img-box">
                 <img :src=course.course_img alt="">
               </div>
@@ -38,7 +38,7 @@
                   </p>
                 </div>
               </div>
-            </a>
+            </div>
           </li>
         </ul>
         </div>
@@ -107,6 +107,9 @@
             console.log(error);
           })
       },
+        toDetail(course_id){
+          this.$router.push(this.$route.path+'/'+course_id)
+        }
     },
     created() {
       this.GetCategoryList();
