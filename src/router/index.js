@@ -10,6 +10,7 @@ import LightCourse from '@/components/LightCourse/LightCourse.vue'
 import Micro from '@/components/Micro/Micro.vue'
 import PersonalTest from '@/components/PersonalTest/PersonalTest.vue'
 import Students from '@/components/Students/Students.vue'
+import Login from '@/components/Login/Login.vue'
 
 Vue.use(Router);
 
@@ -24,6 +25,15 @@ export default new Router({
       path: '/home',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login,
+      meta:{
+        title: '登录',
+        isLogin: true  //false不显示头部
+      },
     },
     {
       path: '/Free',

@@ -14,7 +14,7 @@
             <p>课程小节：{{topInfo.numbers}}小节</p>
             <p>时长：{{topInfo.hours}}小时</p>
           </div>
-          <div class="dis-limit" v-if="paymentInfo.is_promotion">
+          <div class="dis-limit" v-if="paymentInfo.is_promotion" >
             <p class="discount">{{paymentInfo.promotion_name}}</p>
             <p class="limit-time" v-if="paymentInfo.is_promotion">距离结束：仅剩 25天 09小时 41分 <span>30</span> 秒</p>
           </div>

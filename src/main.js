@@ -9,6 +9,7 @@ import IndexCss from '@/css/index.css';
 import LuffyNav from "@/components/Common/LuffyNav.vue"
 import Axios from 'axios'
 import Router from 'vue-router'
+import "../static/common/gt.js"
 
 Vue.prototype.$http=Axios; //注册全局可以使用Axios
 Axios.defaults.baseURL = 'https://www.luffycity.com/api/v1';
@@ -22,9 +23,10 @@ Router.prototype.push = function push(location) {
 };
 
 Vue.component(LuffyNav.name,LuffyNav); //注册导航栏为全局组件
+
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: { App:App },
   template: '<App/>'
 });
