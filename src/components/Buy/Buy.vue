@@ -56,7 +56,7 @@
       <div class="confirm">
         <span class="actual">实付款：</span>
         <span class="price">¥92.4</span>
-        <button>立即支付</button>
+        <form action="http://127.0.0.1:8001/pay" method="post"><button>立即支付</button></form>
       </div>
       </div>
 
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+  import qs  from "qs"
     export default {
         name: "Buy",
         data(){
@@ -89,7 +90,7 @@
             },
             ChoosePayWay(way){
                 this.payWay=way
-            }
+            },
         },
         created() {
             this.GetConfirmInfo()
