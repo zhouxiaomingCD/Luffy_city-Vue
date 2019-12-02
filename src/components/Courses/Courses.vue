@@ -274,6 +274,7 @@
     font-size: 16px;
     border: 1px solid #fd7b4d;
     border-radius: 3px;
+    outline: none;
   }
 
   .price button:hover {

@@ -94,7 +94,6 @@
                     })
                 }
             },
-
             init_gt: function () {
                 this.$http.get("http://127.0.0.1:8001/api" + "/pc-geetest/register?t=" + (new Date()).getTime())
                     .then((res) => {
@@ -129,8 +128,6 @@
         },
         mounted() {
             this.init_gt()
-
-
         }
     }
 
