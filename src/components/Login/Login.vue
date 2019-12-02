@@ -14,7 +14,7 @@
                  placeholder="请输入密码"/>
         </div>
 
-        <div id="wait" class="show">
+        <div id="wait" class="show" style="display: none">
           <div class="loading">
             验证加载中....
           </div>
@@ -46,11 +46,12 @@
                 username: "",
                 pwd: "",
                 validateResult: {},//验证成功之后返回的结果，它用于服务端sdk的二次验
+                captchaObj:{}
             }
         },
         methods: {
 
-            loginHandler: function () {
+            loginHandler: function (obj) {
                 let param = {
                     "username": this.username,
                     "pwd": this.pwd,
@@ -86,7 +87,9 @@
                                 title: "登录失败",
                                 message: res.data.error
                             });
-
+                            this.validateResult={};
+                            document.getElementById('geetest').innerHTML = '';
+                            this.init_gt()
                         }
                     })
                 }
